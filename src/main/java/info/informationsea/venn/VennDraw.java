@@ -30,6 +30,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import lombok.extern.slf4j.Slf4j;
+import org.kohsuke.args4j.CmdLineParser;
 
 import java.awt.*;
 import java.io.IOException;
@@ -40,21 +41,19 @@ public class  VennDraw extends Application {
     public static java.awt.Font mplus;
 
     public static void main(String... args) {
-
-        try {
-            mplus = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf")).deriveFont(12.0f);
-        } catch (FontFormatException | IOException e) {
-            e.printStackTrace();
-        }
-
         if (args.length == 0) {
+            try {
+                mplus = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf")).deriveFont(12.0f);
+            } catch (FontFormatException | IOException e) {
+                e.printStackTrace();
+            }
+
             Font.loadFont(VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf"), 12);
 
             launch(args); // Start GUI
         } else {
-            // TODO: Implement command line interface
-            System.out.println("VennDraw " + VersionResolver.getVersion());
-            System.out.println("Command line interface is not implemented");
+            VennDrawCLI.main(args);
+            System.exit(0);
         }
 
     }
@@ -81,16 +80,21 @@ public class  VennDraw extends Application {
 
         if (System.getProperty("os.name").toLowerCase().contains("mac")) {
             log.info("os x menu");
-            MenuToolkit menuToolkit = MenuToolkit.toolkit();
-            Menu appMenu = menuToolkit.createDefaultApplicationMenu("VennDraw");
+            try {
+                MenuToolkit menuToolkit = MenuToolkit.toolkit();
+                Menu appMenu = menuToolkit.createDefaultApplicationMenu("VennDraw");
 
-            appMenu.getItems().get(appMenu.getItems().size()-1).setOnAction(event -> MainWindowController.getMainWindowControllers().get(0).onQuit(event));
-            MenuItem aboutMenu = new MenuItem("About VennDraw");
-            aboutMenu.setOnAction(event -> MainWindowController.getMainWindowControllers().get(0).onAbout(event));
-            appMenu.getItems().add(0, aboutMenu);
-            appMenu.getItems().add(1, new SeparatorMenuItem());
+                appMenu.getItems().get(appMenu.getItems().size() - 1).setOnAction(event -> MainWindowController.getMainWindowControllers().get(0).onQuit(event));
+                MenuItem aboutMenu = new MenuItem("About VennDraw");
+                aboutMenu.setOnAction(event -> MainWindowController.getMainWindowControllers().get(0).onAbout(event));
+                appMenu.getItems().add(0, aboutMenu);
+                appMenu.getItems().add(1, new SeparatorMenuItem());
 
-            menuToolkit.setApplicationMenu(appMenu);
+                menuToolkit.setApplicationMenu(appMenu);
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+                System.err.println("Null Pointer Exception was ignored");
+            }
         }
 
         primaryStage.show();

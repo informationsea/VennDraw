@@ -16,7 +16,8 @@ apply plugin: "jacoco"
 sourceCompatibility = 1.8
 version = '0.2.0-SNAPSHOT'
 
-mainClassName = "info.informationsea.venn.VennDraw"
+mainClassName = "info.informationsea.venn.VennDrawCLI"
+def mainGUIClassName = "info.informationsea.venn.VennDraw"
 def executableBaseName = "VennDraw"
 def vendor = "Yasunobu OKAMURA"
 
@@ -117,10 +118,11 @@ if (System.properties['os.name'].contains("Mac")) {
 
             exec {
                 executable System.getProperty("java.home") + "/../bin/javapackager"
-                args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainClassName,
+                args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
                         "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
                         "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
-                        "-BappVersion=${version}", "-Bicon=./images/icon.icns", "-vendor", vendor, "-Bidentifier=info.informationsea.venn"
+                        "-BappVersion=${version}", "-Bicon=./images/icon.icns", "-vendor", vendor, "-Bidentifier=info.informationsea.venn",
+                        "-Bmac.bundle-id-signing-prefix=venndraw-"
             }
         }
     }
@@ -134,7 +136,7 @@ if (System.properties['os.name'].contains("Windows")) {
 
         exec {
             executable "javapackager"
-            args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainClassName,
+            args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
                     "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
                     "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
                     "-BappVersion=${version}", "-Bicon=./images/icon.ico", "-vendor", vendor
