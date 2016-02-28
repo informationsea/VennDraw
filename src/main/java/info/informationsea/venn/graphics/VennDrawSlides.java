@@ -53,6 +53,34 @@ public class VennDrawSlides<T> {
         }
         */
 
+        // fill first
+        for (VennFigure.Shape<T> shape : vennFigure.getShapes()) {
+
+            if (shape instanceof VennFigure.Oval) {
+                VennFigure.Oval<T> oval = (VennFigure.Oval<T>) shape;
+                Color fillColor = VennDrawGraphics2D.decodeColor(oval.getColor());
+
+                if (fillColor.getAlpha() != 0) {
+                    XSLFAutoShape autoShape = slide.createAutoShape();
+                    autoShape.setShapeType(XSLFShapeType.ELLIPSE);
+
+                    autoShape.setFillColor(fillColor);
+                    if (fillColor.getAlpha() != 255) {
+                        CTShapeImpl obj = (CTShapeImpl) autoShape.getXmlObject();
+                        obj.getSpPr().getSolidFill().getSrgbClr().addNewAlpha().setVal(100000 * fillColor.getAlpha() / 255);
+                    }
+
+                    autoShape.setAnchor(new Rectangle(
+                            (int) ((oval.getCenter().getX() - oval.getWidth() / 2 - drawRect.getMinX()) * resizeFactor + marginLeft),
+                            (int) ((oval.getCenter().getY() - oval.getHeight() / 2 - drawRect.getMinY()) * resizeFactor + marginTop),
+                            (int) (oval.getWidth() * resizeFactor),
+                            (int) (oval.getHeight() * resizeFactor)));
+                    autoShape.setRotation(oval.getTheta() / Math.PI * 180);
+                }
+            }
+        }
+
+        // stroke next
         for (VennFigure.Shape<T> shape : vennFigure.getShapes()) {
             if (shape instanceof VennFigure.Oval) {
                 VennFigure.Oval<T> oval = (VennFigure.Oval<T>) shape;
@@ -60,16 +88,6 @@ public class VennDrawSlides<T> {
                 autoShape.setShapeType(XSLFShapeType.ELLIPSE);
                 autoShape.setLineColor(Color.BLACK);
                 autoShape.setLineWidth(1);
-
-                Color fillColor = VennDrawGraphics2D.decodeColor(oval.getColor());
-                if (fillColor.getAlpha() != 0) {
-                    autoShape.setFillColor(fillColor);
-                    if (fillColor.getAlpha() != 255) {
-                        // http://osdir.com/ml/user-poi.apache.org/2015-02/msg00030.html
-                        CTShapeImpl obj = (CTShapeImpl)autoShape.getXmlObject();
-                        obj.getSpPr().getSolidFill().getSrgbClr().addNewAlpha().setVal(100000*fillColor.getAlpha()/255);
-                    }
-                }
 
                 autoShape.setAnchor(new Rectangle(
                         (int)((oval.getCenter().getX() - oval.getWidth()/2 - drawRect.getMinX())*resizeFactor + marginLeft),

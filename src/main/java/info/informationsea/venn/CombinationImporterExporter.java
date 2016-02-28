@@ -123,7 +123,7 @@ public class CombinationImporterExporter {
                 case 3:
                 case 4:
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    VennExporter.exportAsPNG(new VennFigureParameters<T>(combinationSolver), outputStream, 800, 10);
+                    VennExporter.exportAsPNG(new VennFigureParameters<T>(combinationSolver, keyList), outputStream, 800, 10);
                     outputStream.close();
 
                     sheet = workbook.createSheet("Venn");
