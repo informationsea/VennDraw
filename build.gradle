@@ -14,7 +14,7 @@ apply plugin: 'application'
 apply plugin: "jacoco"
 
 sourceCompatibility = 1.8
-version = '0.1.0'
+version = '0.2.0-SNAPSHOT'
 
 mainClassName = "info.informationsea.venn.VennDraw"
 def executableBaseName = "VennDraw"
