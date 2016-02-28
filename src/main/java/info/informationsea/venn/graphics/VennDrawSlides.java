@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.apache.poi.xslf.usermodel.*;
+import org.openxmlformats.schemas.presentationml.x2006.main.impl.CTShapeImpl;
 
 import java.awt.*;
 import java.awt.geom.Rectangle2D;
@@ -63,6 +64,11 @@ public class VennDrawSlides<T> {
                 Color fillColor = VennDrawGraphics2D.decodeColor(oval.getColor());
                 if (fillColor.getAlpha() != 0) {
                     autoShape.setFillColor(fillColor);
+                    if (fillColor.getAlpha() != 255) {
+                        // http://osdir.com/ml/user-poi.apache.org/2015-02/msg00030.html
+                        CTShapeImpl obj = (CTShapeImpl)autoShape.getXmlObject();
+                        obj.getSpPr().getSolidFill().getSrgbClr().addNewAlpha().setVal(100000*fillColor.getAlpha()/255);
+                    }
                 }
 
                 autoShape.setAnchor(new Rectangle(

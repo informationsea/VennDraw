@@ -3,6 +3,7 @@ package info.informationsea.venn.graphics;
 import info.informationsea.venn.VennFigure;
 import info.informationsea.venn.VersionResolver;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.pdfbox.cos.COSName;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -11,6 +12,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 import org.apache.pdfbox.pdmodel.graphics.color.PDOutputIntent;
+import org.apache.pdfbox.pdmodel.graphics.state.PDExtendedGraphicsState;
 import org.apache.xmpbox.XMPMetadata;
 import org.apache.xmpbox.schema.DublinCoreSchema;
 import org.apache.xmpbox.schema.PDFAIdentificationSchema;
@@ -59,8 +61,7 @@ public class VennDrawPDF {
         PDPage page = new PDPage(pageSize);
         doc.addPage(page);
 
-        PDPageContentStream contents = new PDPageContentStream(doc, page);
-        VennDrawPDF.draw(vennFigure, contents, font, pageSize);
+        VennDrawPDF.draw(vennFigure, doc, page, font, pageSize);
 
         // PDF/A1b support
         /*
@@ -101,7 +102,9 @@ public class VennDrawPDF {
         */
     }
 
-    public static <T> void draw(VennFigure<T> vennFigure, PDPageContentStream contents, PDFont font, PDRectangle rect) throws IOException {
+    public static <T> void draw(VennFigure<T> vennFigure, PDDocument doc, PDPage page, PDFont font, PDRectangle rect) throws IOException {
+        PDPageContentStream contents = new PDPageContentStream(doc, page);
+
         Rectangle2D drawRect = vennFigure.drawRect(str ->
                 stringBoundingBox(font, str, FONT_SIZE)
         );
@@ -117,6 +120,9 @@ public class VennDrawPDF {
 
                 Color fillColor = VennDrawGraphics2D.decodeColor(oval.getColor());
                 if (fillColor.getAlpha() == 0) continue;
+
+                //COSName graphicsStateName = page.getResources().add(graphicsState);
+
                 List<VennFigure.Point> polygon = oval.toPolygon();
 
                 VennFigure.Point converted = pointConverter.convert(polygon.get(0));
@@ -127,8 +133,21 @@ public class VennDrawPDF {
                     contents.lineTo((float) converted.getX(), (float) converted.getY());
                 }
 
+
+                if (fillColor.getAlpha() != 255) {
+                    PDExtendedGraphicsState graphicsState = new PDExtendedGraphicsState();
+                    graphicsState.setNonStrokingAlphaConstant(fillColor.getAlpha()/255.f);
+                    contents.saveGraphicsState();
+                    contents.setGraphicsStateParameters(graphicsState);
+                }
+
                 contents.setNonStrokingColor(fillColor);
                 contents.fill();
+
+                if (fillColor.getAlpha() != 255) {
+                    contents.restoreGraphicsState();
+                }
+
             }
         }
 
