@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="464.0" prefWidth="796.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.informationsea.venn.fx.MainWindowController">
+    <top>
+        <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onNew" text="New">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#onLoadDataset" text="Open dataset...">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                    <MenuItem mnemonicParsing="false" onAction="#onSaveDataset" text="Save dataset...">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#onExportClicked" text="Export image">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="E" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                    <SeparatorMenuItem mnemonicParsing="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="W" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                    <MenuItem fx:id="quitMenu" mnemonicParsing="false" onAction="#onQuit" text="Quit">
+                        <accelerator>
+                            <KeyCodeCombination alt="UP" code="Q" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                        </accelerator>
+                    </MenuItem>
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Sample Dataset">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onLoadSampleTwo" text="Two groups" />
+                    <MenuItem mnemonicParsing="false" onAction="#onLoadSampleThree" text="Three groups" />
+                    <MenuItem mnemonicParsing="false" onAction="#onLoadSampleFour" text="Four groups" />
+                </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <items>
+                    <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About" />
+               <MenuItem mnemonicParsing="false" onAction="#onGithub" text="Go to GitHub" />
+                </items>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <SplitPane fx:id="splitter" dividerPositions="0.3211586901763224" prefHeight="399.0" prefWidth="638.0" BorderPane.alignment="CENTER">
+            <items>
+                <AnchorPane fx:id="imageAnchorPane" minHeight="0.0" minWidth="0.0" prefHeight="369.0" prefWidth="246.0">
+                    <children>
+                        <SplitPane fx:id="splitter2" dividerPositions="0.5" layoutX="3.0" layoutY="-1.0" orientation="VERTICAL" prefHeight="364.0" prefWidth="228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                            <items>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="189.0" text="Illegal number of groups" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="83.0" />
+                                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="189.0" text="2, 3 or 4 groups are supported" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="111.0" />
+                                        <ImageView fx:id="resultImageView" fitHeight="200.0" fitWidth="200.0" onMouseExited="#onMouseExitedOnImage" onMouseMoved="#onMouseMovedOnImage" pickOnBounds="true" preserveRatio="true" />
+                                    </children>
+                                </AnchorPane>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+                                    <children>
+                                        <Button mnemonicParsing="false" onAction="#onExportClicked" text="Export image" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+                                        <TableView fx:id="combinationTable" prefHeight="66.0" prefWidth="234.0" AnchorPane.bottomAnchor="53.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                            <columns>
+                                                <TableColumn fx:id="tableCombinationColumn" prefWidth="75.0" text="Combination" />
+                                                <TableColumn fx:id="tableNumberOfItems" prefWidth="75.0" text="# of items" />
+                                                <TableColumn fx:id="tableItems" prefWidth="75.0" text="Items" />
+                                            </columns>
+                                        </TableView>
+                                    </children>
+                                </AnchorPane>
+                            </items>
+                        </SplitPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                    <children>
+                        <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onAddGroup" text="Add group" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                        <Accordion fx:id="groupList" layoutY="57.0" prefHeight="312.0" prefWidth="356.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="57.0" />
+                        <Button layoutX="108.0" layoutY="14.0" mnemonicParsing="false" onAction="#onSaveDataset" text="Save dataset" AnchorPane.leftAnchor="108.0" AnchorPane.topAnchor="14.0" />
+                        <Button layoutX="218.0" layoutY="14.0" mnemonicParsing="false" onAction="#onLoadDataset" text="Load dataset" AnchorPane.leftAnchor="218.0" AnchorPane.topAnchor="14.0" />
+                    </children>
+                </AnchorPane>
+            </items>
+        </SplitPane>
+    </center>
+</BorderPane>

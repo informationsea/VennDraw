@@ -1,0 +1,144 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.ajoberstar:gradle-git:0.9.0"
+    }
+}
+
+import org.ajoberstar.grgit.Grgit;
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: "jacoco"
+
+sourceCompatibility = 1.8
+version = '0.1.0'
+
+mainClassName = "info.informationsea.venn.VennDraw"
+def executableBaseName = "VennDraw"
+def vendor = "Yasunobu OKAMURA"
+
+javadoc {
+    options.locale = 'en_US'
+}
+
+task testAndReport(dependsOn: [test, jacocoTestReport]) << {}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'args4j:args4j:2.32'
+    compile 'org.projectlombok:lombok:1.16.6'
+    compile 'org.slf4j:slf4j-api:1.7.14'
+    compile 'org.slf4j:slf4j-simple:1.7.14'
+    compile 'org.apache.xmlgraphics:batik-svggen:1.8'
+    compile 'org.apache.xmlgraphics:batik-dom:1.8'
+    compile ('info.informationsea.tableio:tableio-excel:0.1.2') {
+        exclude group: 'stax', module: 'stax-api'
+    }
+    compile 'info.informationsea.tableio:tableio-csv:0.1.2'
+    compile 'de.codecentric.centerdevice:centerdevice-nsmenufx:2.0.0'
+    compile 'org.apache.pdfbox:pdfbox:2.0.0-RC3'
+    compile 'org.apache.pdfbox:xmpbox:2.0.0-RC3'
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+}
+
+sourceSets {
+    main {
+        resources {
+            srcDirs = ['src/main/resources', "$buildDir/version"]
+        }
+    }
+}
+
+def versionInfoFile = file("$buildDir/version/META-INF/venndraw/version.properties")
+
+task createGitInfoFile {
+
+    outputs.upToDateWhen {
+        if (file(project.file('./.git')).isDirectory() && versionInfoFile.exists()) {
+            def prop = new Properties()
+            prop.load(new FileInputStream(versionInfoFile))
+            def repo = Grgit.open(project.file('.'))
+            return repo.head().id == prop.getProperty("git.commit")
+        } else {
+            return false
+        }
+    }
+
+
+    doLast {
+        if (file(project.file('./.git')).isDirectory()) {
+            def repo = Grgit.open(project.file('.'))
+            versionInfoFile.parentFile.mkdirs()
+            versionInfoFile.text = "git.commit=" + repo.head().id + "\nversion=" + version + "\nbuild.date=" + new Date().toString()
+            println repo.head().id
+        } else {
+            versionInfoFile.text = "git.commit=UNKNOWN\nversion=" + version + "\nbuild.date=" + new Date().toString()
+        }
+    }
+}
+
+processResources.dependsOn.add(createGitInfoFile)
+
+
+
+task executableJar(type: Jar, dependsOn: jar) {
+    archiveName = "${executableBaseName}.jar"
+    manifest {
+        attributes 'Main-Class': mainClassName
+        //attributes 'SplashScreen-Image': 'splash.png'
+    }
+
+    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    from "$buildDir/classes/main"
+    from "$buildDir/resources/main"
+}
+
+task copyDeployFiles(type: Copy, dependsOn: executableJar) {
+    into "$buildDir/deploy-files"
+    from('.') {
+        include 'COPYING'
+    }
+    from ("$buildDir/libs") {
+        include "${executableBaseName}.jar"
+    }
+}
+
+if (System.properties['os.name'].contains("Mac")) {
+
+    for (type in ["image", "dmg", "installer"]) {
+        task "nativePackage_${type}"(dependsOn: copyDeployFiles) << {
+            file("$buildDir/deploy").mkdirs()
+
+            exec {
+                executable System.getProperty("java.home") + "/../bin/javapackager"
+                args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainClassName,
+                        "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
+                        "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
+                        "-BappVersion=${version}", "-Bicon=./images/icon.icns", "-vendor", vendor, "-Bidentifier=info.informationsea.venn"
+            }
+        }
+    }
+}
+
+if (System.properties['os.name'].contains("Windows")) {
+
+    for (type in ["image", "exe", "msi", "installer"]) {
+        task "nativePackage_${type}"(dependsOn: copyDeployFiles) << {
+        file("$buildDir/native").mkdirs()
+
+        exec {
+            executable "javapackager"
+            args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainClassName,
+                    "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
+                    "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
+                    "-BappVersion=${version}", "-Bicon=./images/icon.ico", "-vendor", vendor
+        }
+    }
+}
+}

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="600mm"
+   height="270mm"
+   viewBox="0 0 2125.9843 956.6929"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   sodipodi:docname="splash.svg"
+   inkscape:export-filename="/Users/yasu/Documents/Programming/Java/packages/venndrawer/images/splash.png"
+   inkscape:export-xdpi="25.4"
+   inkscape:export-ydpi="25.4">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.40828148"
+     inkscape:cx="1062.9921"
+     inkscape:cy="708.66142"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1440"
+     inkscape:window-height="810"
+     inkscape:window-x="93"
+     inkscape:window-y="67"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="レイヤー 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(0,-95.669288)">
+    <rect
+       style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect5519"
+       width="2125.9846"
+       height="956.69299"
+       x="0"
+       y="95.669228"
+       ry="478.3465" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:47.48457718px;line-height:125%;font-family:Sans;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       x="1012.702"
+       y="654.67407"
+       id="text4823"
+       sodipodi:linespacing="125%"
+       inkscape:export-xdpi="25.4"
+       inkscape:export-ydpi="25.4"><tspan
+         sodipodi:role="line"
+         id="tspan4825"
+         x="1012.702"
+         y="654.67407"
+         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:213.68061829px;font-family:'Helvetica Neue';-inkscape-font-specification:'Helvetica Neue'">Venn Draw</tspan></text>
+    <g
+       id="g4861"
+       transform="translate(-505.42414,230.31504)">
+      <g
+         transform="translate(462.95411,150.37666)"
+         id="g4827">
+        <circle
+           style="fill:#2ca9e1;fill-opacity:0.47058824;stroke:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+           id="path4800"
+           cx="600.03815"
+           cy="102.32401"
+           r="300.03809" />
+        <circle
+           style="fill:#eb6101;fill-opacity:0.47058824;stroke:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+           id="path4800-1"
+           cx="500.03815"
+           cy="284.32397"
+           r="300.03812" />
+        <circle
+           style="fill:#b8d200;fill-opacity:0.47058824;stroke:none;stroke-width:14;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0"
+           id="path4800-2"
+           cx="700.03815"
+           cy="284.32397"
+           r="300.03812" />
+      </g>
+      <path
+         inkscape:connector-curvature="0"
+         id="path4800-9"
+         d="m 1062.9913,-47.337444 a 300.03805,300.03807 0 0 0 -296.31643,255.376964 300.03804,300.03808 0 0 0 -103.7207,226.66016 300.03804,300.03808 0 0 0 300.0371,300.0391 300.03804,300.03808 0 0 0 100.06453,-17.5157 300.03804,300.03808 0 0 0 99.9355,17.5157 300.03804,300.03808 0 0 0 300.039,-300.0391 300.03804,300.03808 0 0 0 -103.5468,-226.25586 300.03805,300.03807 0 0 0 -296.4922,-255.781264 z"
+         style="fill:none;fill-opacity:0.47058824;stroke:#000000;stroke-width:14;stroke-linecap:round;stroke-linejoin:bevel;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+  </g>
+</svg>

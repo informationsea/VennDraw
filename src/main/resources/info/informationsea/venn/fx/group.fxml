@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<TitledPane fx:id="titledPane" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" prefHeight="400.0" prefWidth="600.0" text="one group" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.informationsea.venn.fx.GroupViewController">
+  <content>
+    <AnchorPane fx:id="anchorPane" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="600.0">
+         <children>
+            <CheckBox fx:id="enabledBox" layoutX="29.0" layoutY="168.0" mnemonicParsing="false" onAction="#onEnableChanged" selected="true" text="Enabled" AnchorPane.leftAnchor="2.0" AnchorPane.topAnchor="6.0" />
+            <TextField fx:id="nameField" layoutX="138.4" layoutY="32.4" prefHeight="27.0" prefWidth="211.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="275.0" AnchorPane.topAnchor="2.0" />
+            <Button layoutX="401.0" layoutY="12.0" mnemonicParsing="false" onAction="#onDelete" text="Delete" AnchorPane.rightAnchor="105.0" AnchorPane.topAnchor="2.0" />
+            <TextArea fx:id="textArea" layoutX="3.0" layoutY="51.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="10.0" minWidth="10.0" onKeyTyped="#onTextAreaTyped" pickOnBounds="false" prefHeight="200.0" prefWidth="500.0" wrapText="true" />
+            <Button fx:id="upButton" layoutX="468.0" layoutY="12.0" mnemonicParsing="false" onAction="#onUp" text="Up" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="2.0" />
+            <Button fx:id="downButton" layoutX="506.0" layoutY="12.0" mnemonicParsing="false" onAction="#onDown" text="Down" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="2.0" />
+            <ColorPicker fx:id="colorPicker" layoutX="240.0" layoutY="32.4" onAction="#onColorChanged" prefHeight="27.0" prefWidth="96.0" AnchorPane.rightAnchor="170.0" AnchorPane.topAnchor="2.0" />
+         </children></AnchorPane>
+  </content>
+</TitledPane>
