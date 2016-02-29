@@ -1,7 +1,7 @@
 Venn Draw
 =======================
 
-![Build Status](https://travis-ci.org/informationsea/VennDraw.svg?branch=master)](https://travis-ci.org/informationsea/VennDraw)
+[![Build Status](https://travis-ci.org/informationsea/VennDraw.svg?branch=master)](https://travis-ci.org/informationsea/VennDraw)
 
 Screenshot
 ----------
