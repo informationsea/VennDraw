@@ -3,15 +3,12 @@ package info.informationsea.venn.graphics;
 import info.informationsea.venn.VennFigure;
 import org.apache.poi.xslf.usermodel.SlideLayout;
 import org.apache.poi.xslf.usermodel.XMLSlideShow;
-import org.apache.poi.xslf.usermodel.XSLFSlide;
 import org.apache.poi.xslf.usermodel.XSLFSlideMaster;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
-import static org.junit.Assert.*;
 
 /**
  * venndraw

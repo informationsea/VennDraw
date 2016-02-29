@@ -6,8 +6,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
-
 /**
  * venndraw
  * Copyright (C) 2016 OKAMURA Yasunobu

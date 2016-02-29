@@ -2,7 +2,6 @@ package info.informationsea.venn.graphics;
 
 import info.informationsea.venn.VennFigure;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.apache.poi.xslf.usermodel.*;
 import org.openxmlformats.schemas.presentationml.x2006.main.impl.CTShapeImpl;

@@ -7,8 +7,6 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
-import static org.junit.Assert.*;
-
 /**
  * VennDraw
  * Copyright (C) 2016 OKAMURA Yasunobu

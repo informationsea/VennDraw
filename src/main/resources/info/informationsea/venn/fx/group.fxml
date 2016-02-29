@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-
 <TitledPane fx:id="titledPane" animated="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="200.0" minWidth="400.0" prefHeight="400.0" prefWidth="600.0" text="one group" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.informationsea.venn.fx.GroupViewController">
   <content>
     <AnchorPane fx:id="anchorPane" minHeight="300.0" minWidth="400.0" prefHeight="300.0" prefWidth="600.0">
