@@ -60,6 +60,7 @@ sourceSets {
 def versionInfoFile = file("$buildDir/version/META-INF/venndraw/version.properties")
 
 task createGitInfoFile {
+    group = 'build'
 
     outputs.upToDateWhen {
         if (file(project.file('./.git')).isDirectory() && versionInfoFile.exists()) {
@@ -89,6 +90,8 @@ processResources.dependsOn.add(createGitInfoFile)
 
 
 task executableJar(type: Jar, dependsOn: jar) {
+    group = 'build'
+
     archiveName = "${executableBaseName}.jar"
     manifest {
         attributes 'Main-Class': mainClassName
@@ -101,6 +104,8 @@ task executableJar(type: Jar, dependsOn: jar) {
 }
 
 task createExecutable(dependsOn: executableJar) << {
+    group = 'build'
+
     def executableFile = file("$buildDir/deploy/${cliExecutableName}")
     executableFile.parentFile.mkdirs()
 
@@ -120,6 +125,8 @@ task createExecutable(dependsOn: executableJar) << {
 }
 
 task deployCli(type: Zip, dependsOn: createExecutable) {
+    group = 'distribution'
+
     from ("$buildDir/deploy") {
         include cliExecutableName
         include "${cliExecutableName}-gui"
@@ -131,11 +138,13 @@ task deployCli(type: Zip, dependsOn: createExecutable) {
 }
 
 task runGUI(type: JavaExec, dependsOn: classes) {
+    group = 'application'
     classpath = sourceSets.main.runtimeClasspath
     main = mainGUIClassName
 }
 
 task executableJarGUI(type: Jar, dependsOn: jar) {
+    group = 'build'
     archiveName = "${executableBaseName}-gui.jar"
     manifest {
         attributes 'Main-Class': mainGUIClassName
@@ -148,6 +157,7 @@ task executableJarGUI(type: Jar, dependsOn: jar) {
 }
 
 task copyDeployFiles(type: Copy, dependsOn: executableJarGUI) {
+    group = 'build'
     into "$buildDir/deploy-files"
     from('.') {
         include 'COPYING'
@@ -161,6 +171,7 @@ if (System.properties['os.name'].contains("Mac")) {
 
     for (type in ["image", "dmg", "installer"]) {
         task "nativePackage_${type}"(dependsOn: copyDeployFiles) << {
+            group = 'distribution'
             file("$buildDir/deploy").mkdirs()
 
             exec {
@@ -179,15 +190,16 @@ if (System.properties['os.name'].contains("Windows")) {
 
     for (type in ["image", "exe", "msi", "installer"]) {
         task "nativePackage_${type}"(dependsOn: copyDeployFiles) << {
-        file("$buildDir/native").mkdirs()
+            group = 'distribution'
+            file("$buildDir/native").mkdirs()
 
-        exec {
-            executable "javapackager"
-            args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
-                    "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
-                    "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}-gui.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
-                    "-BappVersion=${version}", "-Bicon=./images/icon.ico", "-vendor", vendor
+            exec {
+                executable "javapackager"
+                args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
+                        "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
+                        "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}-gui.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
+                        "-BappVersion=${version}", "-Bicon=./images/icon.ico", "-vendor", vendor
+            }
         }
     }
-}
 }
