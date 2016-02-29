@@ -412,6 +412,10 @@ public class MainWindowController implements Initializable {
             controller.setMainWindowController(this);
             controller.setName("group " + (groupViewControllerList.size() + 1));
 
+            if (groupViewControllerList.size() < VennFigure.DEFAULT_COLOR_LIST.length) {
+                controller.setColor(VennFigure.DEFAULT_COLOR_LIST[groupViewControllerList.size()]);
+            }
+
             groupViewControllerList.add(controller);
             refreshGroupState();
             return controller;
