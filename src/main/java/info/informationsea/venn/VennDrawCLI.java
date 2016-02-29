@@ -49,7 +49,7 @@ public class VennDrawCLI {
     String names = "Group 1, Group 2, Group 3, Group 4";
 
     @Option(name = "--colors", aliases = {"-c"}, usage = "Color codes (use , as separator")
-    String colors = String.join(", ", GroupViewController.DEFAULT_COLORS);
+    String colors = String.join(", ", VennFigure.DEFAULT_COLOR_LIST);
 
     @Option(name = "--output", aliases = {"-o"}, usage = "Output files. xlsx, xls, csv, pptx, PDF, png and svg formats are acceptable. (use , as separator)", required = true)
     String output;

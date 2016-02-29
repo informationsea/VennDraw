@@ -16,10 +16,10 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package info.informationsea.venn;
+package info.informationsea.venn.fx;
 
 import de.codecentric.centerdevice.MenuToolkit;
-import info.informationsea.venn.fx.MainWindowController;
+import info.informationsea.venn.VennDrawCLI;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -42,12 +42,12 @@ public class  VennDraw extends Application {
     public static void main(String... args) {
         if (args.length == 0 && !GraphicsEnvironment.isHeadless()) {
             try {
-                mplus = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf")).deriveFont(12.0f);
+                mplus = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, VennDraw.class.getResourceAsStream("mplus-1p-regular.ttf")).deriveFont(12.0f);
             } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
             }
 
-            Font.loadFont(VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf"), 12);
+            Font.loadFont(VennDraw.class.getResourceAsStream("mplus-1p-regular.ttf"), 12);
 
             launch(args); // Start GUI
         } else {
@@ -59,11 +59,11 @@ public class  VennDraw extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("fx/MainWindow.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainWindow.fxml"));
 
         loader.load();
         Scene scene = new Scene((Parent) loader.getRoot());
-        scene.getStylesheets().add(getClass().getResource("fx/style.css").toExternalForm());
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         primaryStage.setScene(scene);
         primaryStage.setTitle("Venn Draw");
 

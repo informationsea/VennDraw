@@ -18,6 +18,7 @@
 
 package info.informationsea.venn.fx;
 
+import info.informationsea.venn.VennFigure;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -39,14 +40,6 @@ import java.util.stream.Stream;
 
 @Slf4j
 public class GroupViewController implements Initializable {
-
-    public static final String[] DEFAULT_COLORS = {
-            "#bce2e8a0",
-            "#d8e698a0",
-            "#fddea5a0",
-            "#f6bfbca0",
-            "#fef263a0"
-    };
 
     @Getter
     @Setter
@@ -140,7 +133,7 @@ public class GroupViewController implements Initializable {
 
         colorPicker.setValue(Color.valueOf("#ffffff00"));
         colorPicker.getCustomColors().add(Color.valueOf("#ffffff00"));
-        colorPicker.getCustomColors().addAll(Stream.of(DEFAULT_COLORS).map(Color::valueOf).collect(Collectors.toSet()));
+        colorPicker.getCustomColors().addAll(Stream.of(VennFigure.DEFAULT_COLOR_LIST).map(Color::valueOf).collect(Collectors.toSet()));
 
         // blurred text area workaround
         textArea.setLayoutX(0);

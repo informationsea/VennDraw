@@ -33,6 +33,15 @@ public class VennFigure<T> {
 
     public static final String DEFUALT_COLOR = "#ffffff00";
 
+    public static final String[] DEFAULT_COLOR_LIST = {
+            "#bce2e8a0",
+            "#d8e698a0",
+            "#fddea5a0",
+            "#f6bfbca0",
+            "#fef263a0"
+    };
+
+
     @Getter
     private List<Shape<T>> shapes;
 
