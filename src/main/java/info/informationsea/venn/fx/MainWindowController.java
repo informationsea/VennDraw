@@ -35,7 +35,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
@@ -133,42 +133,25 @@ public class MainWindowController implements Initializable {
         if (file == null) return;
 
         VennFigureParameters<String> parameters = new VennFigureParameters<String>(combinationSolver, keyList);
-        boolean hasOpacity = keyList.stream().filter(it -> {
-            Color color = VennDrawGraphics2D.decodeColor(it.getColorCode());
-            switch (color.getAlpha()) {
-                case 0xff:
-                case 0x00:
-                    return false;
-                default:
-                    return true;
-            }
-        }).count() > 0;
 
         try {
             if (file.getName().endsWith(".pptx")) {
-                if (hasOpacity) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING, "Ellipses will filled with opacity colors", ButtonType.OK);
-                    alert.setHeaderText("Transparency is not supported in PowerPoint Export");
-                    alert.showAndWait();
-                }
                 VennExporter.exportAsPowerPoint(parameters, file);
             } else if (file.getName().endsWith(".png")) {
                 VennExporter.exportAsPNG(parameters, file, 800, 10);
             } else if (file.getName().endsWith(".svg")) {
                 VennExporter.exportAsSVG(parameters, file, new Dimension(800, 800));
             } else if (file.getName().endsWith(".pdf")) {
-                if (hasOpacity) {
-                    Alert alert = new Alert(Alert.AlertType.WARNING, "Ellipses will filled with opacity colors", ButtonType.OK);
-                    alert.setHeaderText("Transparency is not supported in PDF Export");
-                    alert.showAndWait();
-                }
                 VennExporter.exportAsPDF(parameters, file);
             } else {
                 throw new UnsupportedOperationException("" + file.getName() + " is not supported filetype");
             }
 
         } catch (IOException ioe) {
-            log.info("Failed to export {}", ioe);
+            Alert alert = new Alert(Alert.AlertType.ERROR, ioe.getLocalizedMessage(), ButtonType.OK);
+            alert.setHeaderText("Failed to export image");
+            alert.showAndWait();
+            ioe.printStackTrace();
         }
     }
 
@@ -194,11 +177,72 @@ public class MainWindowController implements Initializable {
         } else {
             imageTooltip.hide();
         }
+        event.consume();
     }
 
     @FXML
     void onMouseExitedOnImage(MouseEvent event) {
         imageTooltip.hide();
+        event.consume();
+    }
+
+
+    private ContextMenu imageContextMenu = new ContextMenu();
+
+    @FXML
+    void onImageContextRequested(ContextMenuEvent event) {
+        imageContextMenu.getItems().clear();
+
+        VennFigure.Point converted = pointConverter.convert(
+                new VennFigure.Point(event.getX()*IMAGE_HIDPI - IMAGE_MARGIN/2, event.getY()*IMAGE_HIDPI - IMAGE_MARGIN/2));
+
+        List<VennFigure.Oval<String>> ovalList = currentVennFigure.ovalsAtPoint(converted);
+        if (ovalList.size() > 0) {
+            MenuItem copyItems = new MenuItem("Copy items");
+            copyItems.setOnAction(event1 -> {
+                Set<String> groups = ovalList.stream().map(VennFigure.Oval::getUserData).collect(Collectors.toSet());
+                String text = String.join("\n", combinationSolver.getCombinationResult().get(groups));
+
+                ClipboardContent clipboardContent = new ClipboardContent();
+                clipboardContent.putString(text);
+                Clipboard.getSystemClipboard().setContent(clipboardContent);
+            });
+            imageContextMenu.getItems().add(copyItems);
+            imageContextMenu.show(imageAnchorPane, event.getScreenX(), event.getScreenY());
+
+        } else {
+            if (imageContextMenu.isShowing())
+                imageContextMenu.hide();
+        }
+        event.consume();
+    }
+
+    @FXML
+    void onImageClicked(MouseEvent event) {
+        if (event.getButton().equals(MouseButton.PRIMARY)) {
+            if (imageContextMenu.isShowing()) {
+                imageContextMenu.hide();
+            }
+
+            VennFigure.Point converted = pointConverter.convert(
+                    new VennFigure.Point(event.getX()*IMAGE_HIDPI - IMAGE_MARGIN/2, event.getY()*IMAGE_HIDPI - IMAGE_MARGIN/2));
+            List<VennFigure.Oval<String>> ovalList = currentVennFigure.ovalsAtPoint(converted);
+
+            if (ovalList.size() > 0) {
+                Set<String> groups = ovalList.stream().map(VennFigure.Oval::getUserData).collect(Collectors.toSet());
+
+                for (int i = 0; i < combinationTable.getItems().size(); i++) {
+                    if (combinationTable.getItems().get(i).getKey().equals(groups)) {
+                        combinationTable.requestFocus();
+                        combinationTable.getSelectionModel().select(i);
+                        combinationTable.scrollTo(i);
+                        break;
+                    }
+                }
+            }
+
+            event.consume();
+        }
     }
 
     @FXML
@@ -375,14 +419,20 @@ public class MainWindowController implements Initializable {
             quitMenu.setVisible(false);
         }
 
-
-        refreshVennFigure();
-
         tableCombinationColumn.setCellValueFactory(param -> new ReadOnlyStringWrapper(String.join(", ", param.getValue().getKey())));
-
         tableNumberOfItems.setCellValueFactory(param -> new ReadOnlyObjectWrapper<>(param.getValue().getValue().size()));
-
         tableItems.setCellValueFactory(param -> new ReadOnlyStringWrapper(String.join(", ", param.getValue().getValue())));
+
+        ContextMenu tableContextMenu = new ContextMenu();
+        MenuItem copyMenuItem = new MenuItem("Copy items");
+        copyMenuItem.setOnAction(event -> {
+            String text = combinationTable.getSelectionModel().getSelectedItems().stream().flatMap(it -> it.getValue().stream()).collect(Collectors.joining("\n"));
+            ClipboardContent content = new ClipboardContent();
+            content.putString(text);
+            Clipboard.getSystemClipboard().setContent(content);
+        });
+        tableContextMenu.getItems().add(copyMenuItem);
+        combinationTable.setContextMenu(tableContextMenu);
 
 
         splitter.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {

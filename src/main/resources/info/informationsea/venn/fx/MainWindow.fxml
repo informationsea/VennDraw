@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
+
 <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="464.0" prefWidth="796.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="info.informationsea.venn.fx.MainWindowController">
     <top>
         <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
@@ -70,7 +73,7 @@
                                     <children>
                                         <Label alignment="CENTER" prefHeight="17.0" prefWidth="189.0" text="Illegal number of groups" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="83.0" />
                                         <Label alignment="CENTER" prefHeight="17.0" prefWidth="189.0" text="2, 3 or 4 groups are supported" textAlignment="CENTER" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="111.0" />
-                                        <ImageView fx:id="resultImageView" fitHeight="200.0" fitWidth="200.0" onMouseExited="#onMouseExitedOnImage" onMouseMoved="#onMouseMovedOnImage" pickOnBounds="true" preserveRatio="true" />
+                                        <ImageView fx:id="resultImageView" fitHeight="200.0" fitWidth="200.0" onContextMenuRequested="#onImageContextRequested" onMouseClicked="#onImageClicked" onMouseExited="#onMouseExitedOnImage" onMouseMoved="#onMouseMovedOnImage" pickOnBounds="true" preserveRatio="true" />
                                     </children>
                                 </AnchorPane>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
