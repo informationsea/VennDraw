@@ -41,7 +41,7 @@ public class  VennDraw extends Application {
     public static java.awt.Font mplus;
 
     public static void main(String... args) {
-        if (args.length == 0) {
+        if (args.length == 0 && !GraphicsEnvironment.isHeadless()) {
             try {
                 mplus = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, VennDraw.class.getResourceAsStream("fx/mplus-1p-regular.ttf")).deriveFont(12.0f);
             } catch (FontFormatException | IOException e) {

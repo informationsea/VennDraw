@@ -42,22 +42,16 @@ public class VennDrawCLI {
     String output;
 
     public static void main(String ... args) {
-
-        if (args.length == 0) {
-            VennDraw.main(args);
-            return;
-        }
-
         VennDrawCLI vennDrawCLI = new VennDrawCLI();
         CmdLineParser parser = new CmdLineParser(vennDrawCLI);
 
         boolean showHelp = false;
 
-        if (args.length == 1) {
-            if (args[0].equals("-h") || args[0].equals("--help") || args[0].equals("-v") || args[0].equals("--version") || args[0].equals("-?")) {
+        if (args.length == 0) showHelp = true;
+
+        if (args.length == 1)
+            if (args[0].equals("-h") || args[0].equals("--help") || args[0].equals("-v") || args[0].equals("--version") || args[0].equals("-?"))
                 showHelp = true;
-            }
-        }
 
         if (!showHelp) {
             try {
@@ -70,6 +64,10 @@ public class VennDrawCLI {
         }
 
         if (showHelp) {
+            System.out.println("VennDraw " + VersionResolver.getVersion());
+            System.out.println("Git Commit: " + VersionResolver.getGitCommit());
+            System.out.println("Build Date: " + VersionResolver.getBuildDate());
+            System.out.println("\n");
             System.out.print("venndraw ");
             parser.printSingleLineUsage(System.out);
             System.out.println();

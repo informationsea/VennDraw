@@ -19,6 +19,7 @@ version = '0.2.0-SNAPSHOT'
 mainClassName = "info.informationsea.venn.VennDrawCLI"
 def mainGUIClassName = "info.informationsea.venn.VennDraw"
 def executableBaseName = "VennDraw"
+def cliExecutableName = "venndraw"
 def vendor = "Yasunobu OKAMURA"
 
 javadoc {
@@ -100,7 +101,7 @@ task executableJar(type: Jar, dependsOn: jar) {
 }
 
 task createExecutable(dependsOn: executableJar) << {
-    def executableFile = file("$buildDir/deploy/${executableBaseName}")
+    def executableFile = file("$buildDir/deploy/${cliExecutableName}")
     executableFile.parentFile.mkdirs()
 
     def output = new FileOutputStream(executableFile)
@@ -110,6 +111,23 @@ task createExecutable(dependsOn: executableJar) << {
     output.write file("$libsDir/${executableBaseName}.jar").bytes
     output.close()
     executableFile.executable = true
+
+    def executableFile2 = file("$buildDir/deploy/${cliExecutableName}-gui")
+    executableFile2.text = "#!/bin/sh\n" +
+            "\n" +
+            "exec java -cp \${0%/*}/${cliExecutableName} $mainGUIClassName"
+    executableFile2.executable = true
+}
+
+task deployCli(type: Zip, dependsOn: createExecutable) {
+    from ("$buildDir/deploy") {
+        include cliExecutableName
+        include "${cliExecutableName}-gui"
+    }
+    from ('.') {
+        include "COPYING"
+        include "README.md"
+    }
 }
 
 task executableJarGUI(type: Jar, dependsOn: jar) {
@@ -123,7 +141,6 @@ task executableJarGUI(type: Jar, dependsOn: jar) {
     from "$buildDir/classes/main"
     from "$buildDir/resources/main"
 }
-
 
 task copyDeployFiles(type: Copy, dependsOn: executableJarGUI) {
     into "$buildDir/deploy-files"
