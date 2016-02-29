@@ -87,7 +87,6 @@ task createGitInfoFile {
 processResources.dependsOn.add(createGitInfoFile)
 
 
-
 task executableJar(type: Jar, dependsOn: jar) {
     archiveName = "${executableBaseName}.jar"
     manifest {
@@ -100,13 +99,39 @@ task executableJar(type: Jar, dependsOn: jar) {
     from "$buildDir/resources/main"
 }
 
-task copyDeployFiles(type: Copy, dependsOn: executableJar) {
+task createExecutable(dependsOn: executableJar) << {
+    def executableFile = file("$buildDir/deploy/${executableBaseName}")
+    executableFile.parentFile.mkdirs()
+
+    def output = new FileOutputStream(executableFile)
+    output.write(("#!/bin/sh\n" +
+            "\n" +
+            "exec java -jar \$0 \"\$@\"\n").bytes)
+    output.write file("$libsDir/${executableBaseName}.jar").bytes
+    output.close()
+    executableFile.executable = true
+}
+
+task executableJarGUI(type: Jar, dependsOn: jar) {
+    archiveName = "${executableBaseName}-gui.jar"
+    manifest {
+        attributes 'Main-Class': mainGUIClassName
+        //attributes 'SplashScreen-Image': 'splash.png'
+    }
+
+    from configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    from "$buildDir/classes/main"
+    from "$buildDir/resources/main"
+}
+
+
+task copyDeployFiles(type: Copy, dependsOn: executableJarGUI) {
     into "$buildDir/deploy-files"
     from('.') {
         include 'COPYING'
     }
     from ("$buildDir/libs") {
-        include "${executableBaseName}.jar"
+        include "${executableBaseName}-gui.jar"
     }
 }
 
@@ -120,7 +145,7 @@ if (System.properties['os.name'].contains("Mac")) {
                 executable System.getProperty("java.home") + "/../bin/javapackager"
                 args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
                         "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
-                        "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
+                        "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}-gui.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
                         "-BappVersion=${version}", "-Bicon=./images/icon.icns", "-vendor", vendor, "-Bidentifier=info.informationsea.venn",
                         "-Bmac.bundle-id-signing-prefix=venndraw-"
             }
@@ -138,7 +163,7 @@ if (System.properties['os.name'].contains("Windows")) {
             executable "javapackager"
             args "-deploy", "-title", "${project.name}", "-name", project.name, "-appclass", mainGUIClassName,
                     "-native", type, "-outdir", "$buildDir/native", "-outfile", project.name,
-                    "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
+                    "-srcdir", "$buildDir/deploy-files", "-srcfiles", "${executableBaseName}-gui.jar", "-srcfiles", "COPYING", "-BlicenseFile=COPYING",
                     "-BappVersion=${version}", "-Bicon=./images/icon.ico", "-vendor", vendor
         }
     }
