@@ -48,6 +48,6 @@ public class VennDrawCLITest {
         String outputs = Arrays.asList("xls", "xlsx", "csv", "png", "svg", "pdf", "pptx").stream().
                 map(it -> new File(DIST_DIR, "test2."+it).toString()).collect(Collectors.joining(","));
 
-        VennDrawCLI.main("-1", "a,b,c", "-2", "b,c,d,e,f", "-3", "1,2,3,4,b,c", "-o", outputs);
+        VennDrawCLI.main("-1", "a,b,c", "-2", "b,c,d,e,f,", "-3", "1,2,3,4,b,", "-o", outputs);
     }
 }

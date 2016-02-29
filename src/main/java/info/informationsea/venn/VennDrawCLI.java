@@ -95,17 +95,17 @@ public class VennDrawCLI {
         List<String> gOutputs = Stream.of(output.split(",")).map(String::trim).collect(Collectors.toList());
 
         int numberOfGroups = 2;
-        Set<String> g1items = Stream.of(group1.split(",")).map(String::trim).collect(Collectors.toSet());
-        Set<String> g2items = Stream.of(group2.split(",")).map(String::trim).collect(Collectors.toSet());
+        Set<String> g1items = Stream.of(group1.split(",")).map(String::trim).filter(it -> !it.isEmpty()).collect(Collectors.toSet());
+        Set<String> g2items = Stream.of(group2.split(",")).map(String::trim).filter(it -> !it.isEmpty()).collect(Collectors.toSet());
         Set<String> g3items = Collections.emptySet();
         Set<String> g4items = Collections.emptySet();
         if (group3 != null) {
-            g3items = Stream.of(group3.split(",")).map(String::trim).collect(Collectors.toSet());
+            g3items = Stream.of(group3.split(",")).map(String::trim).filter(it -> !it.isEmpty()).collect(Collectors.toSet());
             numberOfGroups = 3;
         }
         if (group4 != null) {
             if (group3 == null) throw new RuntimeException("Group 3 is missing");
-            g4items = Stream.of(group4.split(",")).map(String::trim).collect(Collectors.toSet());
+            g4items = Stream.of(group4.split(",")).map(String::trim).filter(it -> !it.isEmpty()).collect(Collectors.toSet());
             numberOfGroups = 4;
         }
 
