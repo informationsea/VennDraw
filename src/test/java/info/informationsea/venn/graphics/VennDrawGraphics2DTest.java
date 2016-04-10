@@ -28,6 +28,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -258,6 +259,29 @@ public class VennDrawGraphics2DTest {
 
 
         ImageIO.write(image, "PNG", new File(DIST_DIR, "test7.png"));
+    }
+
+    @Test
+    public void testDraw8() throws Exception {
+        BufferedImage image = new BufferedImage(800, 800, BufferedImage.TYPE_3BYTE_BGR);
+        Graphics2D graphics = (Graphics2D) image.getGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, 800, 800);
+        graphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+
+        graphics.setColor(Color.BLACK);
+
+        int size = 100;
+        VennFigure<String> vennFigure = new VennFigure<>();
+
+        for (int i = 0; i < 5; i++) {
+            VennFigure.Point center = new VennFigure.Point(17, 4);
+            vennFigure.addShape(new VennFigure.Oval<>(center.rotate(Math.PI/5*i*2), Math.PI/5*i*2, size/2, size, VennFigure.DEFUALT_COLOR));
+        }
+
+        VennDrawGraphics2D.draw(vennFigure, graphics, new Dimension(800, 800));
+        ImageIO.write(image, "PNG", new File(DIST_DIR, "test8.png"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
